@@ -19,10 +19,19 @@ jobs:
     
     - name: Fetch PR diff
       run: |
-        # Fetch the diff from the PR
+        # Fetch all branches
+        git fetch --all
+        
+        # Ensure the base branch (main or another) is available
+        git checkout main || git checkout master
+        
+        # Fetch the PR diff
         git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-branch
+        
+        # Compare the PR branch with the base branch (adjust 'main' if needed)
         git diff origin/main..pr-branch > pr_diff.patch
-      continue-on-error: true  # This ensures the workflow continues even if this step fails
+        # Debug: Check if diff file has content
+        cat pr_diff.patch
     
     - name: Run Python script with PR diff as input
       run: |
