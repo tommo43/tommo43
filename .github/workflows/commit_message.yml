@@ -19,18 +19,17 @@ jobs:
     
     - name: Fetch PR diff
       run: |
-        # Fetch all branches
-        git fetch --all
+        # Get the base and head branch names
+        BASE_BRANCH=${{ github.event.pull_request.base.ref }}
         
-        # Ensure the base branch (main or another) is available
-        git checkout main || git checkout master
+        # Fetch the base branch
+        git fetch origin $BASE_BRANCH
         
-        # Fetch the PR diff
-        git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-branch
+        # Compare the base branch with the current checked-out branch (HEAD)
+        git diff origin/$BASE_BRANCH > pr_diff.patch
         
-        # Compare the PR branch with the base branch (adjust 'main' if needed)
-        git diff origin/main..pr-branch > pr_diff.patch
-        # Debug: Check if diff file has content
+        # Debug: Output base and head branch info, and the diff content
+        echo "Base branch: $BASE_BRANCH"
         cat pr_diff.patch
     
     - name: Run Python script with PR diff as input
