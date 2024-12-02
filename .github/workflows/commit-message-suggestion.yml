@@ -1,23 +1,42 @@
-name: Suggest Commit Messages
+name: Generate Commit Message
 
 on:
   pull_request:
     types: [opened, synchronize]
 
 jobs:
-  suggest-commit-message:
+  generate-message:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Extract Git Diff
-        run: |
-          git fetch origin ${{ github.base_ref }}
-          git diff origin/${{ github.base_ref }} > diff.txt
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
 
-      - name: Run AI Model to Suggest Commit Message
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          python process_diff.py --diff diff.txt
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install transformers torch
+
+    - name: Get Git Diff
+      id: git_diff
+      run: |
+        git fetch origin main
+        git diff origin/main...HEAD > diff.txt
+        echo "::set-output name=diff::$(< diff.txt)"
+
+    - name: Generate Commit Message
+      id: generate_commit_message
+      run: |
+        python generate_commit_message.py diff.txt > commit_message.txt
+      env:
+        DIFF_FILE: diff.txt
+
+    - name: Output Commit Message
+      run: |
+        echo "Suggested Commit Message:"
+        cat commit_message.txt
