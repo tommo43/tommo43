@@ -21,13 +21,12 @@ jobs:
       run: |
         # Get the base and head branch names
         BASE_BRANCH=${{ github.event.pull_request.base.ref }}
-        HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
         
         # Fetch the base branch
         git fetch origin $BASE_BRANCH
         
         # Compare the base branch with the current checked-out branch (HEAD)
-        git diff origin/$BASE_BRANCH..$HEAD_BRANCH > pr_diff.patch
+        git diff origin/$BASE_BRANCH > pr_diff.patch
         
         # Debug: Output base and head branch info, and the diff content
         echo "Base branch: $BASE_BRANCH"
