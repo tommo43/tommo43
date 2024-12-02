@@ -25,8 +25,19 @@ jobs:
     - name: Get Git Diff
       id: git_diff
       run: |
+        # Fetch all branches to ensure we have the latest main branch
         git fetch origin main
-        git diff origin/main...HEAD > diff.txt
+
+        # Check if there is a common ancestor between the branches
+        if git merge-base origin/main HEAD; then
+          # Generate the diff
+          git diff origin/main...HEAD > diff.txt
+        else
+          # Fallback if no common ancestor exists
+          echo "No common ancestor found. Generating diff from the initial commit."
+          git diff $(git rev-list --max-parents=0 HEAD) > diff.txt
+        fi
+
         echo "::set-output name=diff::$(< diff.txt)"
 
     - name: Generate Commit Message
