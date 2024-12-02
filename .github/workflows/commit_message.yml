@@ -30,7 +30,6 @@ jobs:
         
         # Debug: Output base and head branch info, and the diff content
         echo "Base branch: $BASE_BRANCH"
-        echo "Head branch: $HEAD_BRANCH"
         cat pr_diff.patch
     
     - name: Run Python script with PR diff as input
