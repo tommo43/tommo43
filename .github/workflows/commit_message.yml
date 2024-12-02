@@ -1,0 +1,31 @@
+name: Generate Commit Messages
+on: 
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  Create-Commit-Message:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Fetch PR diff
+      run: |
+        # Fetch the diff from the PR
+        git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-branch
+        git diff origin/main..pr-branch > pr_diff.patch
+      continue-on-error: true  # This ensures the workflow continues even if this step fails
+    
+    - name: Run Python script with PR diff as input
+      run: |
+        python3 test.py < pr_diff.patch
+      env:
+        PR_DIFF: ${{ steps.fetch-diff.outputs.diff }}
