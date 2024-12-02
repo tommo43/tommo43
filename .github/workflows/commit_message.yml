@@ -26,6 +26,4 @@ jobs:
     
     - name: Run Python script with PR diff as input
       run: |
-        python3 Test.py < pr_diff.patch
-      env:
-        PR_DIFF: ${{ steps.fetch-diff.outputs.diff }}
+        python3 Test.py pr_diff.patch
