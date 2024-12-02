@@ -10,4 +10,7 @@ else:
     diff = sys.stdin.read()
 
 # Print the diff (or you could process it further)
+print("hi")
 print(diff)
+print("hi")
+
