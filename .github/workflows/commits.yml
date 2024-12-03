@@ -1,0 +1,22 @@
+name: Generate Commit Messages
+on: 
+  push:
+
+jobs:
+  Create-Commit-Message:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Fetch commit diff
+      run: |
+        # TBA
+    
+    - name: Run Python script with commit diff as input
+      run: |
+        # TBA
