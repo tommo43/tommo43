@@ -1,4 +1,4 @@
-name: Generate Commit Messages
+name: Generate PR Messages
 on: 
   pull_request:
     types:
