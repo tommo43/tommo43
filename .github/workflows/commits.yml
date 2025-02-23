@@ -14,6 +14,11 @@ jobs:
       with:
         fetch-depth: 0  # Fetch all history for all branches and tags
     
+    - name: Set up Git configuration
+      run: |
+        git config --global user.email "CommAIt@users.noreply.github.com"
+        git config --global user.name "CommAIt"
+
     - name: Fetch commit diff
       run: |
         # Check if there's at least one previous commit
