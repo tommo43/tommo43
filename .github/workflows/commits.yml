@@ -6,7 +6,7 @@ jobs:
   Create-Commit-Message:
     runs-on: ubuntu-latest
     permissions:
-      contents: read  # pull-requests: write can be removed if not needed
+      contents: write
 
     steps:
     - name: Checkout repository
