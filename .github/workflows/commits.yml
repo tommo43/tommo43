@@ -42,7 +42,7 @@ jobs:
     
     - name: Run Python script with commit diff as input
       run: |
-        python3 generate_message.py commit_diff.patch > commit_message.txt
+        python3 .github/wrokflows/generate_message.py commit_diff.patch > commit_message.txt
     
     - name: Read generated commit message
       id: read_message
