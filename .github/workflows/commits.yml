@@ -41,12 +41,7 @@ jobs:
     
     - name: Read generated commit message
       id: read_message
-      run: |
-        {
-          echo 'message<<EOF'
-          cat commit_message.txt
-          echo 'EOF'
-        } >> "$GITHUB_ENV"
+      run: echo "message=$(cat commit_message.txt)" >> $GITHUB_ENV
 
     - name: Update commit description
       run: |
