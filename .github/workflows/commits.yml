@@ -14,18 +14,24 @@ jobs:
     
     - name: Fetch commit diff
       run: |
-        # Get the last commit hash and the second last commit hash
-        LAST_COMMIT=$(git rev-parse HEAD)
-        PREVIOUS_COMMIT=$(git rev-parse HEAD^)
+        # Check if there's at least one previous commit
+        if [ "$(git rev-list --count HEAD)" -gt 1 ]; then
+          # Get the last commit hash and the second last commit hash
+          LAST_COMMIT=$(git rev-parse HEAD)
+          PREVIOUS_COMMIT=$(git rev-parse HEAD^)
 
-        # Generate the commit diff between the last and previous commit
-        git diff $PREVIOUS_COMMIT..$LAST_COMMIT > commit_diff.patch
+          # Generate the commit diff between the last and previous commit
+          git diff $PREVIOUS_COMMIT..$LAST_COMMIT > commit_diff.patch
 
-        # Debug: Output commit diff info
-        echo "Last commit: $LAST_COMMIT"
-        echo "Previous commit: $PREVIOUS_COMMIT"
-        echo "Commit diff:"
-        cat commit_diff.patch
+          # Debug: Output commit diff info
+          echo "Last commit: $LAST_COMMIT"
+          echo "Previous commit: $PREVIOUS_COMMIT"
+          echo "Commit diff:"
+          cat commit_diff.patch
+        else
+          echo "No previous commit found. Skipping commit diff generation."
+          exit 0  # Exit gracefully if there's no previous commit
+        fi
     
     - name: Run Python script with commit diff as input
       run: |
