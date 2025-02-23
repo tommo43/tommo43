@@ -19,19 +19,22 @@ jobs:
     
     - name: Fetch PR diff
       run: |
-        # Get the base and head branch names
         BASE_BRANCH=${{ github.event.pull_request.base.ref }}
-        
-        # Fetch the base branch
         git fetch origin $BASE_BRANCH
-        
-        # Compare the base branch with the current checked-out branch (HEAD)
         git diff origin/$BASE_BRANCH > pr_diff.patch
-        
-        # Debug: Output base and head branch info, and the diff content
         echo "Base branch: $BASE_BRANCH"
         cat pr_diff.patch
     
     - name: Run Python script with PR diff as input
       run: |
-        python3 Test.py pr_diff.patch
+        python3 generate_message.py pr_diff.patch > commit_message.txt
+    
+    - name: Read generated commit message
+      id: read_message
+      run: echo "message=$(cat commit_message.txt)" >> $GITHUB_ENV
+    
+    - name: Update PR description
+      run: |
+        gh pr edit ${{ github.event.pull_request.number }} --body "$message"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
