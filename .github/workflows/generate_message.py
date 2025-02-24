@@ -4,7 +4,7 @@ import openai
 
 # Retrieve API key from environment variable
 openai_api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
+if not openai_api_key:
     raise ValueError("Missing OPENAI_API_KEY environment variable")
 
 client = openai.OpenAI(api_key = openai_api_key)
