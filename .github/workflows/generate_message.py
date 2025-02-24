@@ -19,7 +19,7 @@ response = client.chat.completions.create(
     model="gpt-4",  # or "gpt-3.5-turbo"
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Give me a random word"}
+        {"role": "user", "content": f"Generate a commit message for the following changes:\n{commit_diff}"}
     ]
 )
 
