@@ -39,12 +39,17 @@ jobs:
           echo "No previous commit found. Skipping commit diff generation."
           exit 1  # Exit gracefully if there's no previous commit
         fi
+
+    - name: Install dependencies
+      run: pip install openai
     
     - name: Run Python script with commit diff as input
       run: |
         python3 .github/workflows/generate_message.py commit_diff.patch > commit_message.txt
-    
+
     - name: Read generated commit message
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       id: read_message
       run: echo "message=$(cat commit_message.txt)" >> $GITHUB_ENV
 
