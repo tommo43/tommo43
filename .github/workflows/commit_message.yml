@@ -44,12 +44,12 @@ jobs:
       run: pip install openai
     
     - name: Run Python script with commit diff as input
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
         python3 .github/workflows/generate_message.py commit_diff.patch > commit_message.txt
 
     - name: Read generated commit message
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       id: read_message
       run: echo "message=$(cat commit_message.txt)" >> $GITHUB_ENV
 
