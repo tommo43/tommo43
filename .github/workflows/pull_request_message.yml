@@ -24,8 +24,13 @@ jobs:
         git diff origin/$BASE_BRANCH > pr_diff.patch
         echo "Base branch: $BASE_BRANCH"
         cat pr_diff.patch
+
+    - name: Install dependencies
+      run: pip install openai
     
     - name: Run Python script with PR diff as input
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
         python3 .github/workflows/generate_message.py pr_diff.patch > commit_message.txt
     
