@@ -1,4 +1,5 @@
 import sys
+import os
 import openai
 
 # Retrieve API key from environment variable
